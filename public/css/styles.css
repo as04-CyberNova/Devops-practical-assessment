@@ -235,6 +235,26 @@ body {
   color: var(--text-muted);
 }
 
+/* Dashboard Alert Box */
+.dashboard-alert {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #FFFFFF;
+  border-left: 4px solid #FFFFFF;
+  color: #FFFFFF;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: fadeIn 0.3s ease;
+}
+.dashboard-alert i {
+  font-size: 1.1rem;
+}
+
 /* Form Styles */
 .form-group {
   margin-bottom: 1.25rem;

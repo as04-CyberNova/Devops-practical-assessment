@@ -14,6 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnText = btnSubmit.querySelector('.btn-text');
   const btnLoader = btnSubmit.querySelector('.btn-loader');
 
+  const formAlertBox = document.getElementById('form-alert-box');
+  const alertTitle = document.getElementById('alert-title');
+  const alertMessage = document.getElementById('alert-message');
+  const alertDismissBtn = document.getElementById('alert-dismiss-btn');
+
+  if (alertDismissBtn) {
+    alertDismissBtn.addEventListener('click', () => {
+      formAlertBox.classList.add('hidden');
+    });
+  }
+
   const feedbackFeed = document.getElementById('feedback-feed');
   const feedCount = document.getElementById('feed-count');
   const searchInput = document.getElementById('search-input');
@@ -172,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('email-error').textContent = '';
     document.getElementById('course-error').textContent = '';
     document.getElementById('feedback-error').textContent = '';
+    formAlertBox.classList.add('hidden');
 
     const studentName = studentNameInput.value.trim();
     const rollNumber = rollNumberInput.value.trim();
@@ -227,7 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchStats();
         fetchFeedbacks();
       } else {
-        showToast(data.message || 'Error submitting feedback', 'error');
+        if (res.status === 409 || data.message.toLowerCase().includes('already submitted') || data.message.toLowerCase().includes('duplicate')) {
+          alertTitle.textContent = 'Duplicate Submission Error';
+          alertMessage.textContent = data.message || 'Student has already submitted feedback for this course.';
+          formAlertBox.classList.remove('hidden');
+        } else {
+          showToast(data.message || 'Error submitting feedback', 'error');
+        }
       }
     } catch (err) {
       showToast('Network error while submitting feedback', 'error');

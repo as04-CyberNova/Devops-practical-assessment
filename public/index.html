@@ -80,6 +80,16 @@
             <p>Share your learning experience & thoughts</p>
           </div>
 
+          <!-- Inline Dashboard Alert Box for Duplicate Student & Validation Errors -->
+          <div id="form-alert-box" class="dashboard-alert hidden">
+            <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="alert-content">
+              <strong id="alert-title">Duplicate Submission Error</strong>
+              <p id="alert-message">Student has already submitted feedback for this course.</p>
+            </div>
+            <button type="button" class="alert-dismiss" id="alert-dismiss-btn">&times;</button>
+          </div>
+
           <form id="feedback-form" novalidate>
             <!-- Student Full Name -->
             <div class="form-group">
