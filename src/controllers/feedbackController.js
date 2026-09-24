@@ -1,0 +1,105 @@
+const feedbackStore = require('../models/feedbackStore');
+
+/**
+ * Controller for handling Student Feedback endpoints
+ */
+
+// GET /api/feedback - Retrieve list of all feedbacks with optional filtering
+exports.getAllFeedbacks = (req, res) => {
+  try {
+    let feedbacks = feedbackStore.getFeedbacks();
+    const { course, search, minRating } = req.query;
+
+    if (course) {
+      feedbacks = feedbacks.filter(f => f.course.toLowerCase() === course.toLowerCase());
+    }
+
+    if (minRating) {
+      const min = Number(minRating);
+      feedbacks = feedbacks.filter(f => f.rating >= min);
+    }
+
+    if (search) {
+      const q = search.toLowerCase();
+      feedbacks = feedbacks.filter(
+        f => f.studentName.toLowerCase().includes(q) ||
+             f.feedback.toLowerCase().includes(q) ||
+             f.course.toLowerCase().includes(q)
+      );
+    }
+
+    return res.status(200).json({
+      success: true,
+      count: feedbacks.length,
+      data: feedbacks
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+  }
+};
+
+// POST /api/feedback - Submit new feedback
+exports.createFeedback = (req, res) => {
+  try {
+    const { studentName, course, rating, feedback, category } = req.body;
+
+    // Validation
+    if (!studentName || !course || !feedback) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide studentName, course, and feedback'
+      });
+    }
+
+    if (studentName.trim().length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: 'Student name must be at least 2 characters long'
+      });
+    }
+
+    if (feedback.trim().length < 5) {
+      return res.status(400).json({
+        success: false,
+        message: 'Feedback comment must be at least 5 characters long'
+      });
+    }
+
+    const numRating = Number(rating);
+    if (isNaN(numRating) || numRating < 1 || numRating > 5) {
+      return res.status(400).json({
+        success: false,
+        message: 'Rating must be a number between 1 and 5'
+      });
+    }
+
+    const created = feedbackStore.addFeedback({
+      studentName,
+      course,
+      rating: numRating,
+      category,
+      feedback
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Feedback submitted successfully',
+      data: created
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+  }
+};
+
+// GET /api/stats - Retrieve feedback aggregated analytics
+exports.getFeedbackStats = (req, res) => {
+  try {
+    const stats = feedbackStore.getStats();
+    return res.status(200).json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+  }
+};

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPulse | Student Feedback & Analytics Platform</title>
+  <meta name="description" content="A modern, high-performance web application for student feedback collection and real-time analytics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Ambient Gradient Orbs -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <div class="app-container">
+    <!-- Header / Navbar -->
+    <header class="navbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="brand-text">
+          <h1>EduPulse <span class="badge-devops"><i class="fa-solid fa-rocket"></i> DevOps Demo</span></h1>
+          <p>Student Feedback & Quality Insights System</p>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <span class="status-indicator">
+          <span class="status-dot"></span> API Active
+        </span>
+        <a href="/api/health" target="_blank" class="btn-secondary btn-sm">
+          <i class="fa-solid fa-heart-pulse"></i> Health Endpoint
+        </a>
+      </div>
+    </header>
+
+    <!-- Analytics Banner -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon bg-indigo"><i class="fa-solid fa-comments"></i></div>
+        <div class="metric-info">
+          <span class="metric-value" id="stat-total">0</span>
+          <span class="metric-label">Total Submissions</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon bg-amber"><i class="fa-solid fa-star"></i></div>
+        <div class="metric-info">
+          <span class="metric-value" id="stat-rating">0.0</span>
+          <span class="metric-label">Average Satisfaction</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon bg-emerald"><i class="fa-solid fa-book-open"></i></div>
+        <div class="metric-info">
+          <span class="metric-value" id="stat-courses">0</span>
+          <span class="metric-label">Active Courses</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon bg-purple"><i class="fa-solid fa-bolt"></i></div>
+        <div class="metric-info">
+          <span class="metric-value" id="stat-cicd">100%</span>
+          <span class="metric-label">CI/CD Automated</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Area: Form + Live Stream -->
+    <main class="main-layout">
+      <!-- Submission Form Sidebar -->
+      <aside class="form-container">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-pen-to-square"></i> Submit Feedback</h2>
+            <p>Share your learning experience & thoughts</p>
+          </div>
+
+          <form id="feedback-form" novalidate>
+            <!-- Name Input -->
+            <div class="form-group">
+              <label for="studentName"><i class="fa-regular fa-user"></i> Full Name <span class="req">*</span></label>
+              <input 
+                type="text" 
+                id="studentName" 
+                name="studentName" 
+                placeholder="e.g. Alex Rivera" 
+                required
+              >
+              <small class="error-msg" id="name-error"></small>
+            </div>
+
+            <!-- Course Select -->
+            <div class="form-group">
+              <label for="course"><i class="fa-solid fa-book"></i> Select Course <span class="req">*</span></label>
+              <select id="course" name="course" required>
+                <option value="" disabled selected>Choose a course...</option>
+                <option value="DevOps & Cloud Engineering">DevOps & Cloud Engineering</option>
+                <option value="Full Stack Web Development">Full Stack Web Development</option>
+                <option value="Data Science & AI Foundations">Data Science & AI Foundations</option>
+                <option value="Cyber Security & Networking">Cyber Security & Networking</option>
+                <option value="UI/UX Design Systems">UI/UX Design Systems</option>
+              </select>
+              <small class="error-msg" id="course-error"></small>
+            </div>
+
+            <!-- Category -->
+            <div class="form-group">
+              <label for="category"><i class="fa-solid fa-tags"></i> Feedback Category</label>
+              <select id="category" name="category">
+                <option value="Course Content">Course Content</option>
+                <option value="Teaching Quality" selected>Teaching Quality</option>
+                <option value="Assignments & Labs">Assignments & Labs</option>
+                <option value="Mentorship & Support">Mentorship & Support</option>
+                <option value="Infrastructure & Tools">Infrastructure & Tools</option>
+              </select>
+            </div>
+
+            <!-- Interactive Star Rating -->
+            <div class="form-group">
+              <label><i class="fa-regular fa-star"></i> Overall Rating <span class="req">*</span></label>
+              <div class="star-rating-picker" id="star-picker">
+                <i class="fa-solid fa-star star" data-rating="1"></i>
+                <i class="fa-solid fa-star star" data-rating="2"></i>
+                <i class="fa-solid fa-star star" data-rating="3"></i>
+                <i class="fa-solid fa-star star" data-rating="4"></i>
+                <i class="fa-solid fa-star star active" data-rating="5"></i>
+              </div>
+              <input type="hidden" id="rating" name="rating" value="5">
+              <span class="rating-label-text" id="rating-label">5.0 - Outstanding</span>
+            </div>
+
+            <!-- Feedback Textarea -->
+            <div class="form-group">
+              <label for="feedback"><i class="fa-regular fa-comment-dots"></i> Detailed Feedback <span class="req">*</span></label>
+              <textarea 
+                id="feedback" 
+                name="feedback" 
+                rows="4" 
+                placeholder="What went well? What can be improved?" 
+                required
+              ></textarea>
+              <small class="error-msg" id="feedback-error"></small>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="btn-submit" class="btn-primary">
+              <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Submit Feedback</span>
+              <span class="btn-loader spinner hidden"></span>
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      <!-- Feedback Stream & Filters -->
+      <section class="feed-container">
+        <div class="glass-card">
+          <!-- Stream Controls Header -->
+          <div class="feed-header">
+            <div class="feed-title">
+              <h2><i class="fa-solid fa-list-check"></i> Live Submissions</h2>
+              <span class="count-pill" id="feed-count">0</span>
+            </div>
+            
+            <div class="feed-controls">
+              <!-- Search Input -->
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" placeholder="Search feedback or student...">
+              </div>
+
+              <!-- Filter Dropdown -->
+              <div class="filter-box">
+                <select id="filter-course">
+                  <option value="">All Courses</option>
+                  <option value="DevOps & Cloud Engineering">DevOps & Cloud</option>
+                  <option value="Full Stack Web Development">Full Stack Web</option>
+                  <option value="Data Science & AI Foundations">Data Science & AI</option>
+                  <option value="Cyber Security & Networking">Cyber Security</option>
+                  <option value="UI/UX Design Systems">UI/UX Design</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feedback Cards Stream -->
+          <div class="feedback-feed" id="feedback-feed">
+            <!-- Dynamic cards will be rendered here -->
+            <div class="loading-state">
+              <div class="spinner"></div>
+              <p>Fetching latest student feedback...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2026 EduPulse | Built for <strong>DevOps Practical Assessment</strong> | Docker & GitHub Actions Automated</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
