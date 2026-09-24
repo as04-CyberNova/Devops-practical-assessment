@@ -26,18 +26,18 @@ An **ultra-premium, production-grade Student Feedback Application** equipped wit
 
 ```mermaid
 graph TD
-    User([🎓 Student / Client Browser]) -->|HTTP GET/POST| Frontend[🎨 Glassmorphism Web Interface]
-    Frontend -->|REST API /api/feedback| ExpressApp[⚡ Node.js & Express REST Backend]
-    ExpressApp -->|Health Monitoring| HealthEndpoint[/api/health]
-    ExpressApp -->|Analytics & Aggregation| StatsEndpoint[/api/stats]
-    ExpressApp -->|In-Memory Store| DataStore[(📦 Feedback Data Store)]
+    User["🎓 Student / Client Browser"] -->|HTTP GET/POST| Frontend["🎨 Glassmorphism Web Interface"]
+    Frontend -->|REST API| ExpressApp["⚡ Node.js & Express REST Backend"]
+    ExpressApp -->|Health Monitoring| HealthEndpoint["🏥 /api/health"]
+    ExpressApp -->|Analytics & Aggregation| StatsEndpoint["📊 /api/stats"]
+    ExpressApp -->|In-Memory Store| DataStore[("📦 Feedback Data Store")]
 
-    subgraph DevOps & CI/CD Pipeline
-        Github[🐙 GitHub Repository] -->|Trigger Push/PR| GHActions[⚙️ GitHub Actions Workflow]
-        GHActions -->|Stage 1| Linting[🔍 ESLint & Static Analysis]
-        GHActions -->|Stage 2| UnitTests[🧪 Jest Unit & Integration Tests]
-        GHActions -->|Stage 3| DockerBuild[🐳 Multi-stage Docker Image Build]
-        GHActions -->|Stage 4| ArtifactDeploy[🚀 Build Release Artifacts]
+    subgraph DevOps ["DevOps & CI/CD Pipeline"]
+        Github["🐙 GitHub Repository"] -->|Trigger Push/PR| GHActions["⚙️ GitHub Actions Workflow"]
+        GHActions -->|Stage 1| Linting["🔍 ESLint & Static Analysis"]
+        GHActions -->|Stage 2| UnitTests["🧪 Jest Unit & Integration Tests"]
+        GHActions -->|Stage 3| DockerBuild["🐳 Multi-stage Docker Image Build"]
+        GHActions -->|Stage 4| ArtifactDeploy["🚀 Build Release Artifacts"]
     end
 ```
 
