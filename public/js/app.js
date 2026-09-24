@@ -246,6 +246,10 @@ document.addEventListener('DOMContentLoaded', () => {
           alertTitle.textContent = 'Duplicate Submission Error';
           alertMessage.textContent = data.message || 'Student has already submitted feedback for this course.';
           formAlertBox.classList.remove('hidden');
+        } else if (res.status === 400) {
+          alertTitle.textContent = 'Validation Error';
+          alertMessage.textContent = data.message || 'Please check your inputs.';
+          formAlertBox.classList.remove('hidden');
         } else {
           showToast(data.message || 'Error submitting feedback', 'error');
         }
