@@ -1,8 +1,11 @@
+const js = require("@eslint/js");
+
 module.exports = [
+  js.configs.recommended,
   {
     files: ["src/**/*.js"],
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: "latest",
       sourceType: "commonjs",
       globals: {
         console: "readonly",
@@ -13,8 +16,8 @@ module.exports = [
       }
     },
     rules: {
-      "no-undef": "error",
-      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      "no-console": "off"
     }
   }
 ];

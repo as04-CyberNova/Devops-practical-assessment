@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Run ESLint Verification
-        run: npm run lint || echo "Linting complete with warnings"
+        run: npm run lint
 
   # ==========================================
   # STAGE 2: Automated Unit & API Testing
@@ -50,13 +50,14 @@ jobs:
         run: npm ci
 
       - name: Execute Automated Test Suite & Coverage
-        run: npm test
+        run: npm run test:coverage
 
       - name: Upload Test Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
+          if-no-files-found: ignore
 
   # ==========================================
   # STAGE 3: Docker Container Build Check
