@@ -204,6 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
       isValid = false;
     }
     if (!email.toLowerCase().endsWith('.niet.co.in') && !email.toLowerCase().endsWith('@niet.co.in')) {
+      alertTitle.textContent = 'Invalid Email Domain';
+      alertMessage.textContent = 'Only official @niet.co.in emails are allowed. Please use your university email.';
+      formAlertBox.classList.remove('hidden');
       document.getElementById('email-error').textContent = 'Only official @niet.co.in emails are allowed.';
       isValid = false;
     }
