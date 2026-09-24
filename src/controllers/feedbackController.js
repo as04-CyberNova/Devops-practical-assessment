@@ -4,6 +4,9 @@ const feedbackStore = require('../models/feedbackStore');
  * Controller for handling Student Feedback endpoints
  */
 
+// Email regex pattern for valid email format
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // GET /api/feedback - Retrieve list of all feedbacks with optional filtering
 exports.getAllFeedbacks = (req, res) => {
   try {
@@ -23,6 +26,8 @@ exports.getAllFeedbacks = (req, res) => {
       const q = search.toLowerCase();
       feedbacks = feedbacks.filter(
         f => f.studentName.toLowerCase().includes(q) ||
+             f.rollNumber.toLowerCase().includes(q) ||
+             f.email.toLowerCase().includes(q) ||
              f.feedback.toLowerCase().includes(q) ||
              f.course.toLowerCase().includes(q)
       );
@@ -41,13 +46,13 @@ exports.getAllFeedbacks = (req, res) => {
 // POST /api/feedback - Submit new feedback
 exports.createFeedback = (req, res) => {
   try {
-    const { studentName, course, rating, feedback, category } = req.body;
+    const { studentName, rollNumber, email, course, rating, feedback, category } = req.body;
 
     // Validation
-    if (!studentName || !course || !feedback) {
+    if (!studentName || !rollNumber || !email || !course || !feedback) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide studentName, course, and feedback'
+        message: 'All required fields must be provided: studentName, rollNumber, email, course, and feedback'
       });
     }
 
@@ -55,6 +60,20 @@ exports.createFeedback = (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Student name must be at least 2 characters long'
+      });
+    }
+
+    if (rollNumber.trim().length < 3) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid official Roll Number'
+      });
+    }
+
+    if (!EMAIL_REGEX.test(email.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid official email address (e.g. student@university.edu)'
       });
     }
 
@@ -73,8 +92,19 @@ exports.createFeedback = (req, res) => {
       });
     }
 
+    // Duplicate Check Rule
+    const existing = feedbackStore.findDuplicate(studentName, rollNumber, email, course);
+    if (existing) {
+      return res.status(409).json({
+        success: false,
+        message: `Duplicate submission rejected: A feedback has already been submitted for student '${studentName.trim()}' (Roll: ${rollNumber.trim().toUpperCase()}) in the course '${course.trim()}'. Duplicate submissions are not allowed.`
+      });
+    }
+
     const created = feedbackStore.addFeedback({
       studentName,
+      rollNumber,
+      email,
       course,
       rating: numRating,
       category,

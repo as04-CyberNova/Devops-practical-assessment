@@ -1,10 +1,12 @@
 /**
- * In-memory Feedback Data Store with sample data for demonstration.
+ * In-memory Feedback Data Store with duplicate prevention & student credentials.
  */
 let feedbackList = [
   {
     id: "fb-101",
     studentName: "Alex Rivera",
+    rollNumber: "2024-CS-101",
+    email: "alex.rivera@university.edu",
     course: "DevOps & Cloud Engineering",
     rating: 5,
     category: "Course Content",
@@ -14,6 +16,8 @@ let feedbackList = [
   {
     id: "fb-102",
     studentName: "Sophia Chen",
+    rollNumber: "2024-SE-204",
+    email: "sophia.chen@university.edu",
     course: "Full Stack Web Development",
     rating: 4,
     category: "Teaching Quality",
@@ -23,6 +27,8 @@ let feedbackList = [
   {
     id: "fb-103",
     studentName: "Marcus Johnson",
+    rollNumber: "2024-DS-309",
+    email: "marcus.j@university.edu",
     course: "Data Science & AI Foundations",
     rating: 5,
     category: "Assignments & Support",
@@ -33,10 +39,26 @@ let feedbackList = [
 
 const getFeedbacks = () => [...feedbackList];
 
+const findDuplicate = (studentName, rollNumber, email, course) => {
+  const normName = studentName.trim().toLowerCase();
+  const normRoll = rollNumber.trim().toLowerCase();
+  const normEmail = email.trim().toLowerCase();
+  const normCourse = course.trim().toLowerCase();
+
+  return feedbackList.find(f => 
+    f.course.toLowerCase() === normCourse &&
+    (f.studentName.toLowerCase() === normName ||
+     f.rollNumber.toLowerCase() === normRoll ||
+     f.email.toLowerCase() === normEmail)
+  );
+};
+
 const addFeedback = (data) => {
   const newFeedback = {
     id: `fb-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     studentName: data.studentName.trim(),
+    rollNumber: data.rollNumber.trim().toUpperCase(),
+    email: data.email.trim().toLowerCase(),
     course: data.course.trim(),
     rating: Number(data.rating) || 5,
     category: data.category || "General",
@@ -78,6 +100,7 @@ const resetStore = () => {
 
 module.exports = {
   getFeedbacks,
+  findDuplicate,
   addFeedback,
   getStats,
   resetStore

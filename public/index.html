@@ -62,10 +62,10 @@
         </div>
       </div>
       <div class="metric-card">
-        <div class="metric-icon bg-purple"><i class="fa-solid fa-bolt"></i></div>
+        <div class="metric-icon bg-purple"><i class="fa-solid fa-shield-check"></i></div>
         <div class="metric-info">
-          <span class="metric-value" id="stat-cicd">100%</span>
-          <span class="metric-label">CI/CD Automated</span>
+          <span class="metric-value" id="stat-cicd">Active</span>
+          <span class="metric-label">Duplicate Prevention</span>
         </div>
       </div>
     </section>
@@ -81,7 +81,7 @@
           </div>
 
           <form id="feedback-form" novalidate>
-            <!-- Name Input -->
+            <!-- Student Full Name -->
             <div class="form-group">
               <label for="studentName"><i class="fa-regular fa-user"></i> Full Name <span class="req">*</span></label>
               <input 
@@ -92,6 +92,32 @@
                 required
               >
               <small class="error-msg" id="name-error"></small>
+            </div>
+
+            <!-- Roll Number -->
+            <div class="form-group">
+              <label for="rollNumber"><i class="fa-solid fa-id-card"></i> Roll Number <span class="req">*</span></label>
+              <input 
+                type="text" 
+                id="rollNumber" 
+                name="rollNumber" 
+                placeholder="e.g. 2024-CS-101" 
+                required
+              >
+              <small class="error-msg" id="roll-error"></small>
+            </div>
+
+            <!-- Student Email -->
+            <div class="form-group">
+              <label for="email"><i class="fa-regular fa-envelope"></i> Student Official Email <span class="req">*</span></label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="e.g. alex.rivera@university.edu" 
+                required
+              >
+              <small class="error-msg" id="email-error"></small>
             </div>
 
             <!-- Course Select -->
@@ -170,7 +196,7 @@
               <!-- Search Input -->
               <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="search-input" placeholder="Search feedback or student...">
+                <input type="text" id="search-input" placeholder="Search name, roll no, or text...">
               </div>
 
               <!-- Filter Dropdown -->
@@ -201,7 +227,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>© 2026 EduPulse | Built for <strong>DevOps Practical Assessment</strong> | Docker & GitHub Actions Automated</p>
+      <p>© 2026 EduPulse | Built for <strong>DevOps Practical Assessment</strong> | Duplicate Guard & CI/CD Enabled</p>
     </footer>
   </div>
 

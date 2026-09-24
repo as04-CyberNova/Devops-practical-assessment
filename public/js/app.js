@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // DOM Elements
   const feedbackForm = document.getElementById('feedback-form');
   const studentNameInput = document.getElementById('studentName');
+  const rollNumberInput = document.getElementById('rollNumber');
+  const emailInput = document.getElementById('email');
   const courseSelect = document.getElementById('course');
   const categorySelect = document.getElementById('category');
   const ratingInput = document.getElementById('rating');
@@ -29,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     4: '4.0 - Very Good',
     5: '5.0 - Outstanding'
   };
+
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // State
   let currentRating = 5;
@@ -138,8 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="author-info">
               <div class="avatar">${initials}</div>
               <div>
-                <div class="author-name">${escapeHtml(item.studentName)}</div>
-                <div class="author-course"><i class="fa-solid fa-graduation-cap"></i> ${escapeHtml(item.course)}</div>
+                <div class="author-name">${escapeHtml(item.studentName)} <span class="category-badge" style="margin-left:6px;"><i class="fa-solid fa-id-badge"></i> ${escapeHtml(item.rollNumber || 'N/A')}</span></div>
+                <div class="author-course"><i class="fa-solid fa-graduation-cap"></i> ${escapeHtml(item.course)} | <i class="fa-regular fa-envelope"></i> ${escapeHtml(item.email || 'N/A')}</div>
               </div>
             </div>
             <div class="card-stars">
@@ -164,10 +168,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset error messages
     document.getElementById('name-error').textContent = '';
+    document.getElementById('roll-error').textContent = '';
+    document.getElementById('email-error').textContent = '';
     document.getElementById('course-error').textContent = '';
     document.getElementById('feedback-error').textContent = '';
 
     const studentName = studentNameInput.value.trim();
+    const rollNumber = rollNumberInput.value.trim();
+    const email = emailInput.value.trim();
     const course = courseSelect.value;
     const category = categorySelect.value;
     const rating = ratingInput.value;
@@ -177,6 +185,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let isValid = true;
     if (studentName.length < 2) {
       document.getElementById('name-error').textContent = 'Please enter at least 2 characters.';
+      isValid = false;
+    }
+    if (rollNumber.length < 3) {
+      document.getElementById('roll-error').textContent = 'Please enter a valid official Roll Number.';
+      isValid = false;
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      document.getElementById('email-error').textContent = 'Please enter a valid official email address.';
       isValid = false;
     }
     if (!course) {
@@ -199,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ studentName, course, category, rating, feedback })
+        body: JSON.stringify({ studentName, rollNumber, email, course, category, rating, feedback })
       });
 
       const data = await res.json();
@@ -288,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toastContainer.appendChild(toast);
     setTimeout(() => {
       toast.remove();
-    }, 3500);
+    }, 4500);
   }
 
   // Initial Load
