@@ -26,7 +26,7 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
       const validStudent = {
         studentName: 'Daniel Vance',
         rollNumber: '2024-CS-404',
-        email: 'daniel.vance@university.edu',
+        email: 'daniel.vance@niet.co.in',
         course: 'DevOps & Cloud Engineering',
         rating: 5,
         category: 'Course Content',
@@ -43,7 +43,7 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
       expect(res.body.data).toHaveProperty('id');
       expect(res.body.data.studentName).toEqual('Daniel Vance');
       expect(res.body.data.rollNumber).toEqual('2024-CS-404');
-      expect(res.body.data.email).toEqual('daniel.vance@university.edu');
+      expect(res.body.data.email).toEqual('daniel.vance@niet.co.in');
       expect(res.body.data.rating).toEqual(5);
     });
   });
@@ -56,7 +56,7 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
       const duplicateSubmission = {
         studentName: 'Alex Rivera', // Already exists in seed data for DevOps course
         rollNumber: '2024-CS-999',
-        email: 'different.email@university.edu',
+        email: 'different.email@niet.co.in',
         course: 'DevOps & Cloud Engineering',
         rating: 4,
         category: 'Teaching Quality',
@@ -76,7 +76,7 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
       const duplicateRoll = {
         studentName: 'John Doe',
         rollNumber: '2024-CS-101', // Roll number belongs to Alex Rivera in DevOps
-        email: 'john.doe@university.edu',
+        email: 'john.doe@niet.co.in',
         course: 'DevOps & Cloud Engineering',
         rating: 5,
         category: 'Assignments & Labs',
@@ -96,7 +96,7 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
       const duplicateEmail = {
         studentName: 'Jane Smith',
         rollNumber: '2024-CS-888',
-        email: 'alex.rivera@university.edu', // Email belongs to Alex Rivera in DevOps
+        email: 'alex.rivera@niet.co.in', // Email belongs to Alex Rivera in DevOps
         course: 'DevOps & Cloud Engineering',
         rating: 3,
         category: 'Course Content',
@@ -116,7 +116,7 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
       const differentCourseSubmission = {
         studentName: 'Alex Rivera', // Existing student in DevOps course
         rollNumber: '2024-CS-101',
-        email: 'alex.rivera@university.edu',
+        email: 'alex.rivera@niet.co.in',
         course: 'Cyber Security & Networking', // Different course!
         rating: 5,
         category: 'Infrastructure & Tools',
@@ -156,7 +156,7 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
       const invalidName = {
         studentName: 'A',
         rollNumber: '2024-CS-500',
-        email: 'a@university.edu',
+        email: 'a@niet.co.in',
         course: 'Full Stack Web Development',
         rating: 4,
         feedback: 'Valid feedback text long enough.'
@@ -187,14 +187,33 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
 
       expect(res.statusCode).toEqual(400);
       expect(res.body.success).toBe(false);
-      expect(res.body.message).toContain('valid official email address');
+      expect(res.body.message).toContain('Only official @niet.co.in email addresses are allowed.');
+    });
+
+    it('TC-VAL-03B: Should reject email domains other than .niet.co.in', async () => {
+      const invalidDomainEmail = {
+        studentName: 'Ethan Hunt',
+        rollNumber: '2024-CS-601',
+        email: 'ethan.hunt@gmail.com',
+        course: 'Full Stack Web Development',
+        rating: 4,
+        feedback: 'Testing invalid email domain rejection.'
+      };
+
+      const res = await request(app)
+        .post('/api/feedback')
+        .send(invalidDomainEmail);
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('Only official @niet.co.in email addresses are allowed.');
     });
 
     it('TC-VAL-04: Should reject rating values outside 1-5 range (e.g. 0 or 6)', async () => {
       const invalidRatingHigh = {
         studentName: 'Olivia Wilde',
         rollNumber: '2024-CS-700',
-        email: 'olivia@university.edu',
+        email: 'olivia@niet.co.in',
         course: 'Full Stack Web Development',
         rating: 6,
         feedback: 'Rating value is out of bounds.'
@@ -213,7 +232,7 @@ describe('EduPulse - Student Feedback API & DevOps Integration Suite', () => {
       const shortComment = {
         studentName: 'Lucas Scott',
         rollNumber: '2024-CS-701',
-        email: 'lucas@university.edu',
+        email: 'lucas@niet.co.in',
         course: 'Full Stack Web Development',
         rating: 3,
         feedback: 'Good'

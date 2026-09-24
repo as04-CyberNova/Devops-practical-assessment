@@ -203,8 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('roll-error').textContent = 'Please enter a valid official Roll Number.';
       isValid = false;
     }
-    if (!EMAIL_REGEX.test(email)) {
-      document.getElementById('email-error').textContent = 'Please enter a valid official email address.';
+    if (!email.toLowerCase().endsWith('.niet.co.in') && !email.toLowerCase().endsWith('@niet.co.in')) {
+      document.getElementById('email-error').textContent = 'Only official @niet.co.in emails are allowed.';
       isValid = false;
     }
     if (!course) {

@@ -70,10 +70,10 @@ exports.createFeedback = (req, res) => {
       });
     }
 
-    if (!EMAIL_REGEX.test(email.trim())) {
+    if (!email.trim().toLowerCase().endsWith('.niet.co.in') && !email.trim().toLowerCase().endsWith('@niet.co.in')) {
       return res.status(400).json({
         success: false,
-        message: 'Please enter a valid official email address (e.g. student@university.edu)'
+        message: 'Only official @niet.co.in email addresses are allowed.'
       });
     }
 
