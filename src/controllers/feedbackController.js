@@ -70,7 +70,8 @@ exports.createFeedback = (req, res) => {
       });
     }
 
-    if (!email.trim().toLowerCase().endsWith('.niet.co.in') && !email.trim().toLowerCase().endsWith('@niet.co.in')) {
+    if (!EMAIL_REGEX.test(email.trim()) || 
+        (!email.trim().toLowerCase().endsWith('.niet.co.in') && !email.trim().toLowerCase().endsWith('@niet.co.in'))) {
       return res.status(400).json({
         success: false,
         message: 'Only official @niet.co.in email addresses are allowed.'

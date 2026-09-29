@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: edupulse-feedback-app
+    env: docker
+    region: oregon # You can change this to ohio, frankfurt, singapore, etc.
+    plan: free
+    branch: main
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
