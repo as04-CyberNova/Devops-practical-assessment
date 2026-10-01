@@ -1,0 +1,32 @@
+name: CI/CD Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Tests
+      run: npm test
+      
+    - name: Build Docker Image
+      run: docker build -t edupulse:latest .
+      
+    # - name: Push to Docker Hub (Uncomment when credentials are set)
+    #   run: |
+    #     echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    #     docker tag edupulse:latest ${{ secrets.DOCKER_USERNAME }}/edupulse:latest
+    #     docker push ${{ secrets.DOCKER_USERNAME }}/edupulse:latest
